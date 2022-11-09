@@ -118,5 +118,15 @@ router.delete("/:username", ensureAdminOrCurUser, async function (req, res, next
   }
 });
 
+router.post("/:username/jobs/:id", ensureAdminOrCurUser, async function( req, res, next) {
+  try {
+    await User.apply(req.params.username, req.params.id);
+    return res.json({ applied: +req.params.id})
+  }
+  catch (err) {
+    return next(err)
+  }
+})
+
 
 module.exports = router;

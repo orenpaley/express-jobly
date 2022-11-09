@@ -64,7 +64,7 @@ class Job {
       whereExpressions.push(`salary >= $${queryValues.length}`);
     }
 
-    if (hasEquity === true) {
+    if (hasEquity) {
       whereExpressions.push(`equity > 0`);
     }
 
