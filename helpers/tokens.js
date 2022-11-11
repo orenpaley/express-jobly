@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 const { SECRET_KEY } = require("../config");
 
-/** return signed JWT from user data. */
+/** return signed JWT from user data. isAdmin set to true or false */
 
 function createToken(user) {
   console.assert(user.isAdmin !== undefined,

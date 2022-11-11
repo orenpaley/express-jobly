@@ -1,11 +1,10 @@
 const { BadRequestError } = require("../expressError");
 
-// THIS NEEDS SOME GREAT DOCUMENTATION.
 
 //dataToUpdate => {key:val, key:val...}
 // injects SQL to thwart security issues with db.query
 //
-  // {data_1:value_1, data_2, value2} =>
+  // {data_1:value_1, data_2: value2} =>
   // {
     // {setCols: data1 = "$1", data2 = "$2"}
     // {Values: [data1,data2]}

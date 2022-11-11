@@ -5,7 +5,6 @@ describe("test partial updater", function() {
     const data = {firstName: "Max", lastName: "Henry"}
     const jsToSql = {firstName:"first_name", lastName:"last_name"}
     const result = sqlForPartialUpdate(data, jsToSql)
-    console.log(result.setCols)
     const setCols = result.setCols
     const values = result.values
 

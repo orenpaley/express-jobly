@@ -11,7 +11,7 @@ class Company {
    *
    * data should be { handle, name, description, numEmployees, logoUrl }
    *
-   * Returns { handle, name, description, numEmployees, logoUrl }
+   * Returns { handle, name, description, numEmployees, logoUrl}
    *
    * Throws BadRequestError if company already in database.
    * */

@@ -19,9 +19,12 @@ function authenticateJWT(req, res, next) {
   try {
     const authHeader = req.headers && req.headers.authorization;
     if (authHeader) {
+      console.log('AUTH HEADER AUTH HEADER', authHeader)
+      // in case the word bearer was including when setting authorization at load,
+      //  it will be removed from 
       const token = authHeader.replace(/^[Bb]earer /, "").trim();
       res.locals.user = jwt.verify(token, SECRET_KEY);
-    }
+    }s
     return next();
   } catch (err) {
     return next();
@@ -67,7 +70,8 @@ function ensureAdmin(req, res, next) {
 
 function ensureAdminOrCurUser(req, res, next) {
   try {
-    if (String(res.locals.user.username) == String(req.params.username)) return next()
+    console.log("RES LOCALS USER RES LOCALS USER REAL REAL", res.locals.user)
+    if ((res.locals.user.username) == String(req.params.username)) return next()
     if (res.locals.user.isAdmin) return next()
     throw new UnauthorizedError()
   }

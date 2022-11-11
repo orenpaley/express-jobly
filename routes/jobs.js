@@ -60,7 +60,7 @@ router.get("/", async function (req, res, next) {
 
 /** GET /[id]  =>  { job }
  *
- *  Job is { id, title, salary, equity, handle, name, description, numEmployees, logoUrl, jobs }
+ *  Job is { id, title, salary, equity, company => {handle, name, description, numEmployees, logoUrl, jobs} }
  *   where jobs is [{ id, title, salary, equity }, ...]
  *
  * Authorization required: none
