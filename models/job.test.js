@@ -9,7 +9,7 @@ const {
   commonBeforeEach,
   commonAfterEach,
   commonAfterAll,
-  testJobIds
+  testJobIds,
 } = require("./_testCommon");
 
 beforeAll(commonBeforeAll);
@@ -19,15 +19,13 @@ afterAll(commonAfterAll);
 
 /************************************** create */
 
-
 describe("create", function () {
-
   let newJob = {
-        title: 'j99',
-        salary: 200000,
-        equity: '0.020', 
-        companyHandle: "c2"
-  }
+    title: "j99",
+    salary: 200000,
+    equity: "0.020",
+    companyHandle: "c2",
+  };
 
   test("works", async function () {
     let job = await Job.create(newJob);
@@ -43,78 +41,81 @@ describe("create", function () {
 describe("findAll", function () {
   test("works: no filter", async function () {
     let jobs = await Job.findAll();
-    console.log(jobs)
+    console.log(jobs);
     expect(jobs).toEqual([
       {
-        id: expect.any(Number), 
-        title: 'j1',
+        id: expect.any(Number),
+        title: "j1",
         salary: 100000,
-        equity: '0.010', 
-        companyHandle: 'c1', 
-        companyName: "C1"
+        equity: "0.010",
+        companyHandle: "c1",
+        companyName: "C1",
       },
       {
-        id: expect.any(Number), 
-        title: 'j2',
+        id: expect.any(Number),
+        title: "j2",
         salary: 200000,
-        equity: '0.020', 
-        companyHandle: 'c2',
-        companyName: "C2"
+        equity: "0.020",
+        companyHandle: "c2",
+        companyName: "C2",
       },
       {
-        id: expect.any(Number), 
+        id: expect.any(Number),
         title: expect.any(String),
         salary: expect.any(Number),
-        equity: expect.any(String), 
-        companyHandle: expect.any(String) ,
-        companyName: expect.any(String)
+        equity: expect.any(String),
+        companyHandle: expect.any(String),
+        companyName: expect.any(String),
       },
-      {  id: expect.any(Number),
+      {
+        id: expect.any(Number),
         title: expect.any(String),
         salary: expect.any(Number),
-        equity: expect.any(String), 
-        companyHandle: expect.any(String), 
-        companyName: expect.any(String)
-      }
+        equity: expect.any(String),
+        companyHandle: expect.any(String),
+        companyName: expect.any(String),
+      },
     ]);
   });
-  test("works: with all filters", async function() {
-    let filters = {title:"j3", minSalary: 150000, hasEquity: true}
-    let jobs = await Job.findAll(filters)
-    expect(jobs).toEqual([{
-      id: expect.any(Number),
-      title: "j3",
-      salary: 300000,
-      equity: '0.030', 
-      companyHandle: 'c3',
-      companyName: 'C3'
-    }])
-  })
-  test("works: with one filter", async function() {
-    let filters = {title:"j4"}
-    let jobs = await Job.findAll(filters)
+  test("works: with all filters", async function () {
+    let filters = { title: "j3", minSalary: 150000, hasEquity: true };
+    let jobs = await Job.findAll(filters);
+    expect(jobs).toEqual([
+      {
+        id: expect.any(Number),
+        title: "j3",
+        salary: 300000,
+        equity: "0.030",
+        companyHandle: "c3",
+        companyName: "C3",
+      },
+    ]);
+  });
+  test("works: with one filter", async function () {
+    let filters = { title: "j4" };
+    let jobs = await Job.findAll(filters);
     expect(jobs).toEqual([
       {
         id: expect.any(Number),
         title: "j4",
         salary: 400000,
-        equity: '0.040', 
-        companyHandle: "c3", 
-        companyName: "C3"
-      }
-    ])
-  })
-  test("works: returns empty from filters", async function() {
-    let filters = {title:"zzzzzzzzzyyyyyyyxxxxx"}
-    let jobs = await Job.findAll(filters)
-    expect(jobs).toEqual([])
-  })
+        equity: "0.040",
+        companyHandle: "c3",
+        companyName: "C3",
+      },
+    ]);
+  });
+  test("works: returns empty from filters", async function () {
+    let filters = { title: "zzzzzzzzzyyyyyyyxxxxx" };
+    let jobs = await Job.findAll(filters);
+    expect(jobs).toEqual([]);
+  });
 
-test("works: returns empty from filters-min", async function() {
-  let filters = {minSalary:10000000}
-  let jobs = await Job.findAll(filters)
-  expect(jobs).toEqual([])
-})
+  test("works: returns empty from filters-min", async function () {
+    let filters = { minSalary: 10000000 };
+    let jobs = await Job.findAll(filters);
+    expect(jobs).toEqual([]);
+  });
 });
 
 /************************************** get */
@@ -124,9 +125,9 @@ describe("get", function () {
     let job = await Job.get(testJobIds[0]);
     expect(job).toEqual({
       id: expect.any(Number),
-      title: 'j1',
+      title: "j1",
       salary: 100000,
-      equity: '0.010', 
+      equity: "0.010",
       company: {
         handle: "c1",
         name: "C1",
@@ -163,20 +164,22 @@ describe("update", function () {
       ...updateData,
     });
 
-
     const result = await db.query(
-          `SELECT id, title, salary, equity, company_handle
+      `SELECT id, title, salary, equity, company_handle
            FROM jobs
-           WHERE id = $1`, 
-           [testJobIds[0]]);
-    console.log(result.rows)
-    expect(result.rows).toEqual([{
-      id: expect.any(Number),
-      title: "New",
-      salary: 500, 
-      equity: "0.5",
-      company_handle: "c1",
-    }]);
+           WHERE id = $1`,
+      [testJobIds[0]]
+    );
+    console.log(result.rows);
+    expect(result.rows).toEqual([
+      {
+        id: expect.any(Number),
+        title: "New",
+        salary: 500,
+        equity: "0.5",
+        company_handle: "c1",
+      },
+    ]);
   });
 
   test("not found if no such job", async function () {
@@ -200,14 +203,14 @@ describe("update", function () {
   });
 });
 
-
 /************************************** remove */
 
 describe("remove", function () {
   test("works", async function () {
     await Job.remove(testJobIds[0]);
-    const res = await db.query(
-        "SELECT id FROM jobs WHERE id=$1", [testJobIds[0]]);
+    const res = await db.query("SELECT id FROM jobs WHERE id=$1", [
+      testJobIds[0],
+    ]);
     expect(res.rows.length).toEqual(0);
   });
 
@@ -219,8 +222,4 @@ describe("remove", function () {
       expect(err instanceof NotFoundError).toBeTruthy();
     }
   });
-  });
-  
-
-
-
+});

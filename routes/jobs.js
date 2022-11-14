@@ -6,7 +6,11 @@ const jsonschema = require("jsonschema");
 const express = require("express");
 
 const { BadRequestError } = require("../expressError");
-const { ensureLoggedIn, ensureAdmin, ensureAdminOrCurUser } = require("../middleware/auth");
+const {
+  ensureLoggedIn,
+  ensureAdmin,
+  ensureAdminOrCurUser,
+} = require("../middleware/auth");
 const Job = require("../models/job");
 
 const jobNewSchema = require("../schemas/jobNew.json");
@@ -23,16 +27,16 @@ const router = new express.Router();
  * Authorization required: login
  */
 
- router.post("/", ensureAdmin, async function (req, res, next) {
+router.post("/", ensureAdmin, async function (req, res, next) {
   try {
     const validator = jsonschema.validate(req.body, jobNewSchema);
     if (!validator.valid) {
-      const errs = validator.errors.map(e => e.stack);
+      const errs = validator.errors.map((e) => e.stack);
       throw new BadRequestError(errs);
     }
-    console.log("STARTING STARTING STARTING STARTING")
+    console.log("STARTING STARTING STARTING STARTING");
     const job = await Job.create(req.body);
-    console.log("JOB", job)
+    console.log("JOB", job);
     return res.status(201).json({ job });
   } catch (err) {
     return next(err);
@@ -41,22 +45,21 @@ const router = new express.Router();
 
 router.get("/", async function (req, res, next) {
   try {
-    const q = req.query
+    const q = req.query;
     if (q.minSalary) {
-      q.minSalary = +q.minSalary
+      q.minSalary = +q.minSalary;
     }
-    if( q.hasEquity === true) {
+    if (q.hasEquity === true) {
       q.hasEquity = q.hasEquity === "true";
     }
-  
+
     const jobs = await Job.findAll(q);
-    console.log("JOBS JOBS JOBS JOBS", jobs)
+    console.log("JOBS JOBS JOBS JOBS", jobs);
     return res.json({ jobs });
   } catch (err) {
     return next(err);
   }
 });
-
 
 /** GET /[id]  =>  { job }
  *
@@ -66,16 +69,15 @@ router.get("/", async function (req, res, next) {
  * Authorization required: none
  */
 
- router.get("/:id", async function (req, res, next) {
+router.get("/:id", async function (req, res, next) {
   try {
     const job = await Job.get(Number(req.params.id));
-    console.log('FORMAT OF A JOB GET WITH ID', job)
+    console.log("FORMAT OF A JOB GET WITH ID", job);
     return res.json({ job });
   } catch (err) {
     return next(err);
   }
 });
-
 
 /** PATCH /[handle] { fld1, fld2, ... } => { company }
  *
@@ -88,12 +90,12 @@ router.get("/", async function (req, res, next) {
  * Authorization required: login
  */
 
-// include ensure loggied in into ensure admin remove array 
+// include ensure loggied in into ensure admin remove array
 router.patch("/:id", ensureAdmin, async function (req, res, next) {
   try {
-    const validator = jsonschema.validate(req.body,jobUpdateSchema);
+    const validator = jsonschema.validate(req.body, jobUpdateSchema);
     if (!validator.valid) {
-      const errs = validator.errors.map(e => e.stack);
+      const errs = validator.errors.map((e) => e.stack);
       throw new BadRequestError(errs);
     }
 
@@ -104,13 +106,12 @@ router.patch("/:id", ensureAdmin, async function (req, res, next) {
   }
 });
 
-
 /** DELETE /[id]  =>  { deleted: id }
  *
  * Authorization: login
  */
 
- router.delete("/:id", ensureAdmin, async function (req, res, next) {
+router.delete("/:id", ensureAdmin, async function (req, res, next) {
   try {
     await Job.remove(req.params.id);
     return res.json({ deleted: req.params.id });
@@ -120,4 +121,3 @@ router.patch("/:id", ensureAdmin, async function (req, res, next) {
 });
 
 module.exports = router;
-
